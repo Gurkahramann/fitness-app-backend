@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
+const cookieParser = require("cookie-parser"); // ⬅️ Cookie'leri okumak için eklenmeli
 
 const envPath = path.resolve(__dirname, '../.env');
 dotenv.config({ path: envPath });
@@ -15,6 +16,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser()); // ⬅️ Cookie'leri kullanmak için ekle
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

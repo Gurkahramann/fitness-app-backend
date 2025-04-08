@@ -1,0 +1,28 @@
+# Operating System / IDE / Editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+
+# Java / Maven
+target/
+*.class
+*.war
+*.jar
+*.ear
+*.iml
+
+# Environment / Secrets
+.env
+
+# Misc
+dist/
+coverage/

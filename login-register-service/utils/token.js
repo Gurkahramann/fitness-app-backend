@@ -1,10 +1,25 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const generateToken = (user) => {
+/**
+ * Access Token oluşturma fonksiyonu (1 saat geçerli)
+ */
+const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" } // 1 saat
   );
 };
 
-module.exports = { generateToken };
+/**
+ * Refresh Token oluşturma fonksiyonu (1 yıl geçerli)
+ */
+const generateRefreshToken = (user) => {
+  return jwt.sign(
+    { id: user._id },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: "1y" } // 1 yıl
+  );
+};
+
+module.exports = { generateAccessToken, generateRefreshToken };
