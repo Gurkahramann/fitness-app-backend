@@ -21,4 +21,5 @@ public class User {
     private Integer age;
     private String activityLevel;
     private String goal;
+    private String birthDate; // YYYY-MM-DD formatında saklanacak
 }
