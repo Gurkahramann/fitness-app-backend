@@ -112,7 +112,7 @@ const updateUserProfile = async (req, res) => {
 
     const token = authHeader.split(" ")[1]
     const decoded = jwt.verify(token, process.env.JWT_SECRET) // token doğrulama
-    const userId = decoded.userId
+    const userId = decoded.id
 
     // 2. Body'den güncellenecek alanları al
     const {

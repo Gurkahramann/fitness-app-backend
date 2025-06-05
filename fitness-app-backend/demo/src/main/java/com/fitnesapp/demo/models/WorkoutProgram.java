@@ -41,8 +41,7 @@ public class WorkoutProgram {
     @Column(name = "tag")
     private Set<String> tags;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("dayIndex ASC")
+    @OneToMany
     private List<WorkoutDay> days;
 
     // Sosyal alanlar

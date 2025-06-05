@@ -4,26 +4,23 @@ import lombok.*;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "workout_day_exercises")
+@Table(name = "exercise_sets")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WorkoutDayExercise {
+public class ExerciseSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "day_id")
-    private WorkoutDay day;
-    
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "exercise_id")
-    private Exercise exercise;
+    @JoinColumn(name = "exercise_entry_id")
+    private ExerciseEntry exerciseEntry;
 
-    private Integer sets;
+    private Integer setNo;
     private Integer reps;
+    private Double weight;
+    private Integer rpe;
     private Integer durationSec;
-    private Integer restSec;
 }

@@ -15,14 +15,11 @@ public class WorkoutDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "program_id")
-    private WorkoutProgram program;
+    @Column(name = "user_id")
+    private String userId; // MongoDB'deki User'ın id'si
 
-    private Integer dayIndex;
-    private String dayLabel;
+    private String date; // YYYY-MM-DD
 
-    @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("id ASC")
-    private List<WorkoutDayExercise> exercises;
+    @OneToMany(mappedBy = "workoutDay", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExerciseEntry> exerciseEntries;
 }

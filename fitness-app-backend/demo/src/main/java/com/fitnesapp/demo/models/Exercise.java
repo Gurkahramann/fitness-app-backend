@@ -15,10 +15,14 @@ public class Exercise {
     private Long id;
 
     private String name;              // "Bench Press"
-    private String primaryMuscle;     // "Chest"
-    private String equipment;         // "Barbell"
-    private String mediaUrl;          // Media URL (image/video thumbnail)
-    
-    @Lob
-    private String description;
+    private String type;              // "cardio" or "strength"
+    private String muscleGroup;       // "Chest"
+    private String videoUrl;          // Video URL
+    @ElementCollection
+    private java.util.List<String> instructions;
+    @ElementCollection
+    private java.util.List<String> tips;
+    private String duration;
+    private String calories;
+    private String image;
 } 

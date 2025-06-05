@@ -6,6 +6,6 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/refresh-token", refreshToken);
 router.post("/logout", logout);
-router.put("/auth/update-profile", updateUserProfile)
+router.put("/update-profile", updateUserProfile)
 
 module.exports = router;
