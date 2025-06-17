@@ -1,30 +1,36 @@
 package com.fitnesapp.demo.models;
 
-import lombok.*;
 import jakarta.persistence.*;
 import java.util.List;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "exercise_entries")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class ExerciseEntry {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workout_day_id")
+    @JoinColumn(name = "workout_day_id", nullable = false)
+    @JsonBackReference
     private WorkoutDay workoutDay;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exercise_id")
+    @ManyToOne
+    @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
-    private Integer orderIndex;
+    private int orderIndex;
 
     @OneToMany(mappedBy = "exerciseEntry", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("setNo ASC")
     private List<ExerciseSet> exerciseSets;
 }

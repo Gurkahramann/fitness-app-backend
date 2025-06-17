@@ -6,26 +6,25 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "workout_days")
+@Table(name = "user_workout_days")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WorkoutDay {
+public class UserWorkoutDay {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Bu günün hangi programa ait olduğunu belirtir.
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "program_id", nullable = false)
+    @JoinColumn(name = "user_workout_program_id", nullable = false)
     @JsonBackReference
-    private WorkoutProgram workoutProgram;
+    private UserWorkoutProgram userWorkoutProgram;
 
-    private int dayOfWeek; // 1=Pazartesi, ..., 7=Pazar
+    private int dayNumber; // 1=Pazartesi, ..., 7=Pazar
 
-    @OneToMany(mappedBy = "workoutDay", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userWorkoutDay", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("orderIndex ASC")
-    private List<ExerciseEntry> exerciseEntries;
-}
+    private List<UserExerciseEntry> savedExerciseEntries;
+} 

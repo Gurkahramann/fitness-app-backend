@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/exercises")
-public class ExerciseController {
+@RequestMapping("/api/import")
+public class ExerciseImportController {
 
     @Autowired
     private ExerciseService exerciseService;
 
-    @GetMapping
-    public ResponseEntity<List<Exercise>> getAllExercises() {
-        List<Exercise> exercises = exerciseService.getAllExercises();
-        return ResponseEntity.ok(exercises);
+    @PostMapping("/exercises")
+    public ResponseEntity<?> importExercises(@RequestBody List<Exercise> exercises) {
+        List<Exercise> saved = exerciseService.saveAll(exercises);
+        return ResponseEntity.ok(saved.size() + " exercise(s) imported successfully!");
     }
 }
