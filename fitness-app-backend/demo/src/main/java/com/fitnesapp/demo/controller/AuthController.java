@@ -12,53 +12,49 @@ import com.fitnesapp.demo.dto.UserResponseDto;
 import com.fitnesapp.demo.models.User;
 import com.fitnesapp.demo.security.JwtUtil;
 import com.fitnesapp.demo.services.AuthService;
+import com.fitnesapp.demo.services.NodeAuthClientService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.http.MediaType;
 
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    private AuthService authService;
+    private NodeAuthClientService nodeAuthClientService;
+
     @GetMapping("/me")
     public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization") String token) {
         token = token.replace("Bearer ", "");
-    
-        Optional<User> user = authService.validateTokenAndGetUser(token);
-    
-        if (user.isEmpty()) {
-            return ResponseEntity.status(401).body("Token geçersiz veya süresi dolmuş");
+        // Sadece kullanıcı bilgisi endpointini çağır
+        ResponseEntity<String> userInfoResponse = nodeAuthClientService.getUserInfo(token);
+        if (!userInfoResponse.getStatusCode().is2xxSuccessful() || userInfoResponse.getBody() == null) {
+            return ResponseEntity.status(401).body("Token geçersiz, süresi dolmuş veya kullanıcı bulunamadı.");
         }
-    
-        // Şifreyi gizlemek için DTO ile dön
-        return ResponseEntity.ok(new UserResponseDto(user.get()));
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(userInfoResponse.getBody());
     }
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    @GetMapping("/userinfo")
+    //@GetMapping("/userinfo")
+    /*
     public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(401).body("Token eksik veya geçersiz.");
         }
-
         String token = authHeader.substring(7);
-        String userId = jwtUtil.extractUserId(token); // static değil!
-
-        UserInfoDto userInfo = authService.getUserInfo(userId);
-
-        if (userInfo == null) {
-            return ResponseEntity.status(404).body("Kullanıcı bulunamadı.");
+        ResponseEntity<String> userInfoResponse = nodeAuthClientService.getUserInfo(token);
+        if (!userInfoResponse.getStatusCode().is2xxSuccessful() || userInfoResponse.getBody() == null) {
+            return ResponseEntity.status(401).body("Token geçersiz, süresi dolmuş veya kullanıcı bulunamadı.");
         }
-
-        return ResponseEntity.ok(userInfo);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(userInfoResponse.getBody());
     }
-
-    
+                */
 }

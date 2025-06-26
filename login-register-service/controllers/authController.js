@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const { hashPassword, comparePasswords } = require('../utils/hash');
-const { generateAccessToken, generateRefreshToken } = require("../utils/token");
+const { generateAccessToken, generateRefreshToken, verifyToken } = require("../utils/token");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
@@ -173,5 +173,39 @@ console.log("COOKIES:", req.cookies);
     res.status(500).json({ message: "Logout error", error: error.message });
   }
 };
+const validateToken = (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(400).json({ valid: false, error: 'Token gerekli' });
+  try {
+    verifyToken(token);
+    return res.status(200).json({ valid: true });
+  } catch (err) {
+    return res.status(401).json({ valid: false, error: 'Geçersiz token' });
+  }
+};
 
-module.exports = { register, login, refreshToken, logout, updateUserProfile };
+// Kullanıcı bilgisi fonksiyonu
+const getUserInfo = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Token eksik veya geçersiz' });
+  }
+  const token = authHeader.replace('Bearer ', '');
+  try {
+    console.log("Gelen token:", token);
+    const decoded = verifyToken(token);
+    console.log("Decoded:", decoded);
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+    // _id'yi id olarak mapleyip, _id ve __v alanlarını kaldır
+    const userObj = user.toObject();
+    userObj.id = userObj._id;
+    delete userObj._id;
+    delete userObj.__v;
+    return res.json(userObj);
+  } catch (err) {
+    console.error("Token doğrulama hatası:", err);
+    return res.status(401).json({ error: 'Geçersiz token' });
+  }
+};
+module.exports = { register, login, refreshToken, logout, updateUserProfile,validateToken,getUserInfo};

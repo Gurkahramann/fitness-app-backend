@@ -20,8 +20,11 @@ public class UserWorkoutProgram {
     @Column(nullable = false)
     private String userId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long workoutProgramId;
+
+    @Column(nullable = true)
+    private Long customWorkoutProgramId;
 
     @Column(nullable = false)
     private LocalDate startDate;

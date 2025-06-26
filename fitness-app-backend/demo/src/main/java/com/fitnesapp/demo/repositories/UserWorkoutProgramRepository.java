@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface UserWorkoutProgramRepository extends JpaRepository<UserWorkoutProgram, Long> {
     // Kullanıcıya ait programları getir
     java.util.List<UserWorkoutProgram> findByUserId(String userId);
+
+    void deleteByCustomWorkoutProgramId(Long customWorkoutProgramId);
 } 

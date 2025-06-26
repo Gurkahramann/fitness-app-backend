@@ -1,0 +1,30 @@
+package com.fitnesapp.demo.models;
+
+import lombok.*;
+import jakarta.persistence.*;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Entity
+@Table(name = "custom_workout_days")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class CustomWorkoutDay {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "custom_program_id", nullable = false)
+    @JsonBackReference
+    private CustomWorkoutProgram customWorkoutProgram;
+
+    private int dayOfWeek;
+
+    @OneToMany(mappedBy = "customWorkoutDay", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("orderIndex ASC")
+    private List<CustomExerciseEntry> exerciseEntries;
+}

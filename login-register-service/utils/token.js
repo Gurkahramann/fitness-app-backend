@@ -22,4 +22,11 @@ const generateRefreshToken = (user) => {
   );
 };
 
-module.exports = { generateAccessToken, generateRefreshToken };
+/**
+ * Token doğrulama fonksiyonu
+ */
+const verifyToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
+
+module.exports = { generateAccessToken, generateRefreshToken, verifyToken };

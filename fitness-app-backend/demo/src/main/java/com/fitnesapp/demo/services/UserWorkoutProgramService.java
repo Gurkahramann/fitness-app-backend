@@ -30,8 +30,9 @@ public class UserWorkoutProgramService {
     public String saveUserWorkoutProgram(UserWorkoutProgramDto dto) {
         UserWorkoutProgram program = UserWorkoutProgram.builder()
             .userId(dto.getUserId())
-            .workoutProgramId(dto.getWorkoutProgramId())
             .startDate(dto.getStartDate())
+            .workoutProgramId(dto.getWorkoutProgramId())
+            .customWorkoutProgramId(dto.getCustomWorkoutProgramId())
             .build();
 
         // Save workout days
@@ -65,21 +66,26 @@ public class UserWorkoutProgramService {
 
     public List<UserWorkoutProgramResponseDto> getUserProgramsWithDetails(String userId) {
         List<UserWorkoutProgram> programs = userWorkoutProgramRepository.findByUserId(userId);
-        return programs.stream().map(this::toResponseDto).collect(java.util.stream.Collectors.toList());
+        return programs.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    private UserWorkoutProgramResponseDto toResponseDto(UserWorkoutProgram program) {
+    private UserWorkoutProgramResponseDto convertToDto(UserWorkoutProgram program) {
         UserWorkoutProgramResponseDto dto = new UserWorkoutProgramResponseDto();
         dto.setId(program.getId());
+        dto.setUserId(program.getUserId());
         dto.setWorkoutProgramId(program.getWorkoutProgramId());
+        dto.setCustomWorkoutProgramId(program.getCustomWorkoutProgramId());
         dto.setStartDate(program.getStartDate());
+
         if (program.getSavedDays() != null) {
-            dto.setSavedDays(program.getSavedDays().stream().map(this::toDayResponseDto).collect(java.util.stream.Collectors.toList()));
+            dto.setSavedDays(program.getSavedDays().stream()
+                .map(this::convertDayToDto)
+                .collect(Collectors.toList()));
         }
         return dto;
     }
 
-    private UserWorkoutDayResponseDto toDayResponseDto(UserWorkoutDay day) {
+    private UserWorkoutDayResponseDto convertDayToDto(UserWorkoutDay day) {
         UserWorkoutDayResponseDto dto = new UserWorkoutDayResponseDto();
         dto.setId(day.getId());
         dto.setDayNumber(day.getDayNumber());
@@ -111,5 +117,16 @@ public class UserWorkoutProgramService {
             dto.setExercise(exerciseDto);
         }
         return dto;
+    }
+
+    @Transactional
+    public void deleteUserWorkoutProgram(String userId, String programId) {
+        List<UserWorkoutProgram> userPrograms = userWorkoutProgramRepository.findByUserId(userId);
+        UserWorkoutProgram program = userPrograms.stream()
+            .filter(p -> p.getId().toString().equals(programId))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Program bulunamadı"));
+        
+        userWorkoutProgramRepository.delete(program);
     }
 } 

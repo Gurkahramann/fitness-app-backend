@@ -1,6 +1,7 @@
 package com.fitnesapp.demo.controller;
 
 import com.fitnesapp.demo.dto.WorkoutProgramDto;
+import com.fitnesapp.demo.dto.WorkoutProgramImportDto;
 import com.fitnesapp.demo.models.WorkoutProgram;
 import com.fitnesapp.demo.services.WorkoutProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,11 @@ public class WorkoutProgramController {
     public ResponseEntity<WorkoutProgramDto> getWorkoutProgramById(@PathVariable Long id) {
         WorkoutProgramDto dto = workoutProgramService.getWorkoutProgramDtoById(id);
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/custom")
+    public ResponseEntity<WorkoutProgramDto> saveCustomWorkoutProgram(@RequestBody WorkoutProgramImportDto dto) {
+        WorkoutProgram program = workoutProgramService.saveCustomWorkoutProgram(dto);
+        return ResponseEntity.ok(workoutProgramService.toDto(program));
     }
 } 

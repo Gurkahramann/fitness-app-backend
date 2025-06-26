@@ -46,7 +46,7 @@ public class WorkoutProgramService {
         return programs.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    private WorkoutProgramDto toDto(WorkoutProgram program) {
+    public WorkoutProgramDto toDto(WorkoutProgram program) {
         WorkoutProgramDto dto = new WorkoutProgramDto();
         dto.id = program.getId();
         dto.title = program.getTitle();
@@ -156,5 +156,54 @@ public class WorkoutProgramService {
             count++;
         }
         return count;
+    }
+
+    @Transactional
+    public WorkoutProgram saveCustomWorkoutProgram(WorkoutProgramImportDto dto) {
+        WorkoutProgram program = new WorkoutProgram();
+        program.setTitle(dto.getTitle());
+        program.setSlug(dto.getSlug());
+        program.setDescription(dto.getDescription());
+        program.setDifficulty(com.fitnesapp.demo.models.Difficulty.valueOf(dto.getDifficulty()));
+        program.setDurationWeeks(dto.getDurationWeeks());
+        program.setCoverImageUrl(dto.getCoverImageUrl());
+        program.setTags(dto.getTags());
+        // Map exercises by ID
+        if (dto.getExercises() != null) {
+            List<Exercise> exercises = dto.getExercises().stream()
+                    .map(id -> exerciseRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Exercise not found for id: " + id)))
+                    .collect(Collectors.toList());
+            program.setExercises(exercises);
+        }
+        // Map days
+        if (dto.getDays() != null) {
+            List<WorkoutDay> days = dto.getDays().stream().map(dayDto -> {
+                WorkoutDay day = new WorkoutDay();
+                day.setDayOfWeek(dayDto.getDayOfWeek());
+                day.setWorkoutProgram(program);
+                // Map exercise entries
+                if (dayDto.getExerciseEntries() != null) {
+                    List<ExerciseEntry> entries = dayDto.getExerciseEntries().stream().map(entryDto -> {
+                        ExerciseEntry entry = new ExerciseEntry();
+                        entry.setOrderIndex(entryDto.getOrderIndex());
+                        entry.setWorkoutDay(day);
+                        // Set exercise by id (throw if not found)
+                        if (entryDto.getExerciseId() != null) {
+                            Exercise exercise = exerciseRepository.findById(entryDto.getExerciseId())
+                                .orElseThrow(() -> new IllegalArgumentException("Exercise not found for id: " + entryDto.getExerciseId()));
+                            entry.setExercise(exercise);
+                        } else {
+                            throw new IllegalArgumentException("ExerciseId is null in exerciseEntry!");
+                        }
+                        return entry;
+                    }).collect(Collectors.toList());
+                    day.setExerciseEntries(entries);
+                }
+                return day;
+            }).collect(Collectors.toList());
+            program.setDays(days);
+        }
+        return workoutProgramRepository.save(program);
     }
 } 

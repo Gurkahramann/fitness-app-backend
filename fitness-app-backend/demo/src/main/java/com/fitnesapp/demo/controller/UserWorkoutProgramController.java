@@ -32,4 +32,14 @@ public class UserWorkoutProgramController {
         List<UserWorkoutProgramResponseDto> result = userWorkoutProgramService.getUserProgramsWithDetails(userId);
         return ResponseEntity.ok(result);
     }
+
+    @DeleteMapping("/{userId}/{programId}")
+    public ResponseEntity<Map<String, String>> deleteUserWorkoutProgram(
+            @PathVariable String userId,
+            @PathVariable String programId) {
+        userWorkoutProgramService.deleteUserWorkoutProgram(userId, programId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Program başarıyla kaldırıldı");
+        return ResponseEntity.ok(response);
+    }
 } 

@@ -11,6 +11,7 @@ import java.util.List;
 public class UserWorkoutProgramDto {
     private String userId;
     private Long workoutProgramId;
+    private Long customWorkoutProgramId;
     private LocalDate startDate;
     private List<UserWorkoutDayDto> savedDays;
-} 
+}
