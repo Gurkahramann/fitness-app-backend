@@ -38,8 +38,8 @@ public class CustomWorkoutProgramController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<CustomWorkoutProgram>> getUserPrograms(@PathVariable String userId) {
-        return ResponseEntity.ok(customWorkoutProgramService.getUserPrograms(userId));
+    public ResponseEntity<List<CustomWorkoutProgramDto>> getUserPrograms(@PathVariable String userId) {
+        return ResponseEntity.ok(customWorkoutProgramService.getUserProgramsDto(userId));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomProgram(@PathVariable Long id, @RequestParam String userId) {

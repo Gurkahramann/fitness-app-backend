@@ -7,4 +7,5 @@ public class ExerciseLogDto {
     private String exerciseId;
     private String date;
     private int durationSeconds;
+    private boolean completed;
 }

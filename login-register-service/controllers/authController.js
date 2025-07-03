@@ -157,14 +157,9 @@ const logout = async (req, res) => {
     // Hem body'den hem header'dan hem de cookie'den almayı dene
     const refreshToken = req.body.refreshToken || req.headers['x-refresh-token']
 
-console.log("BODY:", req.body);
-console.log("HEADERS:", req.headers);
-console.log("COOKIES:", req.cookies);
-
     if (!refreshToken) return res.status(400).json({ message: "No refresh token provided" });
 
     // Refresh token'ı veritabanından kaldır
-    console.log("refreshToken", refreshToken)
     await User.findOneAndUpdate({ refreshToken }, { refreshToken: null });
 
     if (res.clearCookie) res.clearCookie("refreshToken");
@@ -192,9 +187,7 @@ const getUserInfo = async (req, res) => {
   }
   const token = authHeader.replace('Bearer ', '');
   try {
-    console.log("Gelen token:", token);
     const decoded = verifyToken(token);
-    console.log("Decoded:", decoded);
     const user = await User.findById(decoded.id).select('-password');
     if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
     // _id'yi id olarak mapleyip, _id ve __v alanlarını kaldır

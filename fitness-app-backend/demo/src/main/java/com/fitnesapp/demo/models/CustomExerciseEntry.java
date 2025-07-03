@@ -24,4 +24,9 @@ public class CustomExerciseEntry {
     private int orderIndex;
 
     private Long exerciseId; // Referans olarak sadece id tutuyoruz
+
+    private Integer sets;
+    private Integer reps;
+    private Double weight;
+    private String duration;
 }

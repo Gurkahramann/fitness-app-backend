@@ -22,7 +22,7 @@ public class UserWorkoutDay {
     @JsonBackReference
     private UserWorkoutProgram userWorkoutProgram;
 
-    private int dayNumber; // 1=Pazartesi, ..., 7=Pazar
+    private int dayNumber; 
 
     @OneToMany(mappedBy = "userWorkoutDay", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("orderIndex ASC")

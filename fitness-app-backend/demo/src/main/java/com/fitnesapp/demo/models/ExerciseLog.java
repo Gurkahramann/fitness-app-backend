@@ -24,5 +24,6 @@ public class ExerciseLog {
     private String date; // ISO string
     private int durationSeconds;
     private double calories;
+    private boolean completed = false;
 
 }

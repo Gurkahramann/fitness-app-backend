@@ -4,6 +4,9 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+# Docker
+Dockerfile  
+docker-compose.yml
 
 # Node.js
 node_modules/
@@ -26,3 +29,35 @@ target/
 # Misc
 dist/
 coverage/
+
+# Python / FastAPI project ---------------------------------------------------
+# Ignore Python byte-code, caches, and shared objects
+*.py[cod]
+__pycache__/
+*.so
+
+# Ignore virtual-environment directories (global patterns)
+.venv/
+venv/
+env/
+
+# Ignore the local virtual environment used by the food-calorie-calculator app
+food-calorie-calculator/yolovenv/
+
+# Ignore any nested __pycache__ folders or compiled files within the app
+food-calorie-calculator/**/__pycache__/
+food-calorie-calculator/**/*.py[cod]
+
+# Ignore large assets or model weights that shouldn't be committed
+food-calorie-calculator/*.jpg
+food-calorie-calculator/*.jpeg
+food-calorie-calculator/*.png
+food-calorie-calculator/*.gif
+food-calorie-calculator/*.bmp
+food-calorie-calculator/*.pt
+food-calorie-calculator/*.pth
+food-calorie-calculator/*.tar.gz
+food-calorie-calculator/*.zip
+
+# Keep the main application entrypoint tracked
+!food-calorie-calculator/main.py

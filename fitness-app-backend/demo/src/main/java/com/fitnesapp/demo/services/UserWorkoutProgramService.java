@@ -50,6 +50,10 @@ public class UserWorkoutProgramService {
                             .map(exerciseDto -> UserExerciseEntry.builder()
                                 .exerciseId(exerciseDto.getExerciseId())
                                 .orderIndex(exerciseDto.getOrderIndex())
+                                .sets(exerciseDto.getSets())
+                                .reps(exerciseDto.getReps())
+                                .weight(exerciseDto.getWeight())
+                                .duration(exerciseDto.getDuration())
                                 .userWorkoutDay(day)
                                 .build())
                             .collect(Collectors.toList()));
@@ -100,6 +104,10 @@ public class UserWorkoutProgramService {
         dto.setId(entry.getId());
         dto.setExerciseId(entry.getExerciseId());
         dto.setOrderIndex(entry.getOrderIndex());
+        dto.setSets(entry.getSets());
+        dto.setReps(entry.getReps());
+        dto.setWeight(entry.getWeight());
+        dto.setDuration(entry.getDuration());
         Exercise exercise = exerciseRepository.findById(entry.getExerciseId()).orElse(null);
         if (exercise != null) {
             ExerciseDto exerciseDto = new ExerciseDto();

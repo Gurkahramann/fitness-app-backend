@@ -10,4 +10,8 @@ public class UserExerciseEntryResponseDto {
     private Long exerciseId;
     private int orderIndex;
     private ExerciseDto exercise;
+    private Integer sets;
+    private Integer reps;
+    private Double weight;
+    private String duration;
 } 

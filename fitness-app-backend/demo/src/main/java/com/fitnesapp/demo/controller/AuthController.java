@@ -1,20 +1,11 @@
 package com.fitnesapp.demo.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fitnesapp.demo.dto.UserInfoDto;
-import com.fitnesapp.demo.dto.UserResponseDto;
-import com.fitnesapp.demo.models.User;
-import com.fitnesapp.demo.security.JwtUtil;
-import com.fitnesapp.demo.services.AuthService;
 import com.fitnesapp.demo.services.NodeAuthClientService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

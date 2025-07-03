@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+yolovenv/
+.venv/
+venv/
+
+# Data, weights, large assets
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.pt
+*.pth
+*.zip
+*.tar.gz
+
+# Environment & config files (already provided via Docker env vars)
+.env
+
+# Git & metadata
+.git/ 

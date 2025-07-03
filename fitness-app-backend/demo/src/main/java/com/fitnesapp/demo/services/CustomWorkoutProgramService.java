@@ -42,6 +42,10 @@ public class CustomWorkoutProgramService {
                         CustomExerciseEntry entry = new CustomExerciseEntry();
                         entry.setOrderIndex(entryDto.getOrderIndex());
                         entry.setExerciseId(entryDto.getExerciseId());
+                        entry.setSets(entryDto.getSets());
+                        entry.setReps(entryDto.getReps());
+                        entry.setWeight(entryDto.getWeight());
+                        entry.setDuration(entryDto.getDuration());
                         entry.setCustomWorkoutDay(day);
                         return entry;
                     }).collect(Collectors.toList());
@@ -54,9 +58,40 @@ public class CustomWorkoutProgramService {
         return customWorkoutProgramRepository.save(program);
     }
 
-    public List<CustomWorkoutProgram> getUserPrograms(String userId) {
-        return customWorkoutProgramRepository.findByUserId(userId);
+    public List<CustomWorkoutProgramDto> getUserProgramsDto(String userId) {
+        List<CustomWorkoutProgram> programs = customWorkoutProgramRepository.findByUserId(userId);
+        return programs.stream().map(program -> {
+            CustomWorkoutProgramDto dto = new CustomWorkoutProgramDto();
+            dto.setId(program.getId());
+            dto.setUserId(program.getUserId());
+            dto.setTitle(program.getTitle());
+            dto.setDescription(program.getDescription());
+            dto.setDurationWeeks(program.getDurationWeeks());
+            dto.setTags(program.getTags());
+            dto.setCoverImageUrl(program.getCoverImageUrl());
+            if (program.getDays() != null) {
+                dto.setDays(program.getDays().stream().map(day -> {
+                    com.fitnesapp.demo.dto.CustomWorkoutDayDto dayDto = new com.fitnesapp.demo.dto.CustomWorkoutDayDto();
+                    dayDto.setDayOfWeek(day.getDayOfWeek());
+                    if (day.getExerciseEntries() != null) {
+                        dayDto.setExerciseEntries(day.getExerciseEntries().stream().map(entry -> {
+                            com.fitnesapp.demo.dto.CustomExerciseEntryDto entryDto = new com.fitnesapp.demo.dto.CustomExerciseEntryDto();
+                            entryDto.setOrderIndex(entry.getOrderIndex());
+                            entryDto.setExerciseId(entry.getExerciseId());
+                            entryDto.setSets(entry.getSets());
+                            entryDto.setReps(entry.getReps());
+                            entryDto.setWeight(entry.getWeight());
+                            entryDto.setDuration(entry.getDuration());
+                            return entryDto;
+                        }).collect(java.util.stream.Collectors.toList()));
+                    }
+                    return dayDto;
+                }).collect(java.util.stream.Collectors.toList()));
+            }
+            return dto;
+        }).collect(java.util.stream.Collectors.toList());
     }
+
     @Transactional
     public void deleteCustomProgram(Long id, String userId) {
         CustomWorkoutProgram program = customWorkoutProgramRepository.findById(id)

@@ -34,6 +34,7 @@ public class ExerciseLogService {
         log.setExerciseId(dto.getExerciseId());
         log.setDate(dto.getDate());
         log.setDurationSeconds(dto.getDurationSeconds());
+        log.setCompleted(dto.isCompleted());
 
         // Kullanıcı bilgilerini çek
         User user = userRepository.findById(dto.getUserId()).orElse(null);
@@ -74,7 +75,7 @@ public class ExerciseLogService {
         WeeklySummaryDto summary = new WeeklySummaryDto();
         summary.setUserId(userId);
         summary.setWeekStartDate(weekStart.toString());
-        summary.setTotalWorkouts(workoutDays.size());
+        summary.setTotalWorkouts(logs.size());
         summary.setTotalCalories(totalCalories);
         summary.setTotalDuration(totalDuration);
         return summary;
@@ -85,8 +86,8 @@ public class ExerciseLogService {
             WeeklyWorkoutHistoryItemDto dto = new WeeklyWorkoutHistoryItemDto();
             dto.setDate(log.getDate().toString());
             dto.setDurationMinutes(log.getDurationSeconds() / 60);
+            dto.setDurationSeconds(log.getDurationSeconds());
             dto.setCalories((int) log.getCalories());
-            // Egzersiz adını ve tipini bulmak için:
             Exercise exercise = null;
             try {
                 exercise = exerciseRepository.findById(Long.parseLong(log.getExerciseId())).orElse(null);
@@ -95,6 +96,7 @@ public class ExerciseLogService {
             }
             dto.setExerciseName(exercise != null ? exercise.getName() : "");
             dto.setExerciseType(exercise != null ? exercise.getType() : "");
+            dto.setCompleted(log.isCompleted());
             return dto;
         }).collect(Collectors.toList());
     }
